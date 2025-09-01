@@ -875,24 +875,13 @@ WHAT YOU WILL RECEIVE (as separate parts in the same request)
 2. HTML_TEMPLATE: {government_html_template}
 
 GOAL
-Produce a single, fully filled proposal_document.html based on the context from CONTEXT_DATA and infer any values that needs to be added. Do NOT Hallucinate. Use only the context here. Ensure all the blanks "custom-fill-in" are filled with the context from CONTEXT_DATA.
+Produce a single, fully filled proposal_document.html based on the context from CONTEXT_DATA and infer any values that needs to be added. Do NOT Hallucinate. Use only the context here. ACCO mentioned in the context is the bidder and LSHS is the project owner.
 
 TEMPLATE HANDLING RULES
-
-* Replace example/placeholder text (titles, owners, addresses, dates, spec numbers, “Page X”, bidder lines, addenda, amounts, descriptive paragraphs) with values from CONTEXT_DATA.
-* Pricing: populate from costBreakdown; ensure a clearly emphasized “Total Project Cost” row (retain and use the template’s existing styling; if a yellow/emphasis row exists, keep it).
-* Contract/Bid specifics (when present in CONTEXT_DATA): insert succinctly in the relevant descriptive areas without altering layout, including: Bid Bond, Liquidated Damages, Substantial/Final Completion, Audit Allowance for Change Orders only, Lump Sum/Tax handling, Change Order Markup schedule, 5% Retainage, Cost Definition, Warranty.
-
-
-SAFETY
-
-* Strip/escape unsafe HTML from CONTEXT_DATA (no scripts/event handlers).
-* Sanitize any rich text before inserting into the template.
-
-STRICT OUTPUT
-
-* Return ONLY the final merged HTML document (no commentary).
-* Must be a single valid HTML file ready to save as proposal_document.html.
+* Replace all the blanks "custom-fill-in" with the data for the project based on the context from CONTEXT_DATA. "Calculate any data needed based on project materials and equipment costs, labour charges, contractor fees, etc specified in the context".
+* Append the following sections to the template:
+* Pricing: Create a cost Breakdown section; ensure a clearly emphasized “Total Project Cost” row.
+* Bid Bond, Liquidated Damages, Substantial/Final Completion, Audit Allowance for Change Orders only, Lump Sum/Tax handling, Change Order Markup schedule, Retainage, Cost Definition, Warranty.    
 
 INTEGRATED CONTRACT INSERTS (ADD THESE WHEN APPLICABLE)
 
@@ -921,17 +910,7 @@ FIELD MAPPING GUIDANCE (non-exhaustive)
 * Pricing table → costBreakdown rows; compute/display Total Project Cost using provided total if present; otherwise sum numeric line items. Respect template currency/formatting if implied.
 * Terms & Conditions → termsConditions, plus any contract specifics listed above when present.
 
-MISSING DATA BEHAVIOR
+"""
 
-* If a value is missing, keep the template’s existing blank line/underline.
-* Use “N.A.” only where the template’s pattern or label implies that behavior.
-* Never invent numbers, dates, or entities.
-
-FINAL CHECKS
-
-* Do not alter classes, IDs, Tailwind CDN, fonts, or embedded JS (e.g., print button).
-* Ensure valid HTML (single root, proper nesting).
-* Ensure all inserted text is sanitized per SAFETY.
-        """
     return government_prompt_template
     
