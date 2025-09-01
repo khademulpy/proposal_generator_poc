@@ -658,7 +658,7 @@ government_html_template = """
             <div>
                 <span class="font-bold">SUBMITTED BY:</span>
                 <span class="ml-2">Proposer's Name:</span>
-                <span class="inline-block w-full border-b border-gray-400 mt-1"></span>
+                <span class="inline-block w-full border-b border-gray-400 mt-1 custom-fill-in"></span>
             </div>
         </div>
 
@@ -681,9 +681,9 @@ government_html_template = """
             <p>The Undersigned offers to provide the following Proposed Price and Duration:</p>
             <div class="flex items-center mt-2 ml-4">
                 <span class="italic">LSHS Building 1 Boiler Plant Upgrade</span>
-                <div class="flex-grow border-b border-gray-400 ml-4"></div>
+                <div class="flex-grow border-b border-gray-400 ml-4 custom-fill-in"></div>
                 <span class="ml-4">Dollars ($</span>
-                <div class="flex-grow border-b border-gray-400"></div>
+                <div class="flex-grow border-b border-gray-400 custom-fill-in"></div>
                 <span>)</span>
             </div>
         </div>
@@ -692,7 +692,7 @@ government_html_template = """
             <div class="font-bold uppercase mb-2">ADDENDUM:</div>
             <div class="flex items-center">
                 <span>Receipt of Addenda numbered 1 through</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in" ></div>
                 <span class="ml-2">is hereby acknowledged.</span>
             </div>
         </div>
@@ -704,9 +704,9 @@ government_html_template = """
             </p>
             <div class="flex items-center mt-4">
                 <span>Trench Excavation Safety Provisions Only:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
                 <span class="ml-2">$</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
         </div>
     </div>
@@ -733,54 +733,54 @@ government_html_template = """
         <div class="space-y-6 text-sm">
             <div class="flex items-center">
                 <span>Legal Name of Bidder's Firm:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Business Address:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Telephone Number:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
                 <span class="ml-4">Fax Number:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Email Address:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Contractor's State of Washington License Registration Number:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Contractor's State of Washington License Registration Expiration Date:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Contractor's State of Washington Excise Tax Registration Number:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>State of Incorporation, if Corporation:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Names of Partners, if Partnership:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
-                <div class="flex-grow border-b border-gray-400 ml-4"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
+                <div class="flex-grow border-b border-gray-400 ml-4 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Signature:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Printed Name:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
             <div class="flex items-center">
                 <span>Title:</span>
-                <div class="flex-grow border-b border-gray-400 ml-2"></div>
+                <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
         </div>
         
@@ -872,24 +872,17 @@ You are a proposal generator.
 WHAT YOU WILL RECEIVE (as separate parts in the same request)
 
 1. CONTEXT_DATA: {transcript_summary}
-2. GOVERNMENT_HTML_TEMPLATE: {government_html_template}
+2. HTML_TEMPLATE: {government_html_template}
 
 GOAL
-Produce a single, fully filled proposal_document.html by merging CONTEXT_DATA into GOVERNMENT_HTML_TEMPLATE. Do NOT invent facts. If a field is missing, keep the blank line already in the template or write “N.A.” only where the template implies that behavior.
+Produce a single, fully filled proposal_document.html based on the context from CONTEXT_DATA and infer any values that needs to be added. Do NOT Hallucinate. Use only the context here. Ensure all the blanks "custom-fill-in" are filled with the context from CONTEXT_DATA.
 
 TEMPLATE HANDLING RULES
 
-* Preserve ALL existing HTML/CSS/JS exactly (Tailwind CDN, fonts, print button, classes).
 * Replace example/placeholder text (titles, owners, addresses, dates, spec numbers, “Page X”, bidder lines, addenda, amounts, descriptive paragraphs) with values from CONTEXT_DATA.
-* Where the template shows underlined blanks (e.g., bidder info), fill from CONTEXT_DATA or leave a clean underline/blank if not provided (or “N.A.” where appropriate).
 * Pricing: populate from costBreakdown; ensure a clearly emphasized “Total Project Cost” row (retain and use the template’s existing styling; if a yellow/emphasis row exists, keep it).
 * Contract/Bid specifics (when present in CONTEXT_DATA): insert succinctly in the relevant descriptive areas without altering layout, including: Bid Bond, Liquidated Damages, Substantial/Final Completion, Audit Allowance for Change Orders only, Lump Sum/Tax handling, Change Order Markup schedule, 5% Retainage, Cost Definition, Warranty.
 
-CONTENT & STYLE
-
-* Professional, formal tone. All text black; keep the template’s blue accents as-is.
-* Keep paragraph/list/table styles consistent with the template. Do not add borders/lines.
-* Do not introduce new sections; fill what exists in the template.
 
 SAFETY
 

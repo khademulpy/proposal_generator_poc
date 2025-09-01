@@ -11,7 +11,7 @@ app = FastAPI(title="ACCOES Proposal Generation API", version="1.0.0")
 
 @app.get("/generate-proposal")
 async def generate_proposal(
-    template_type: str = Query("private", description="Type of template: 'private' or 'government'")
+    template_type: str = Query("government", description="Type of template: 'private' or 'government'")
 ):
     """
     Generate a proposal document based on the template type and provided parameters.
