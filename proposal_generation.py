@@ -783,10 +783,6 @@ government_html_template = """
                 <div class="flex-grow border-b border-gray-400 ml-2 custom-fill-in"></div>
             </div>
         </div>
-        
-        <div class="text-center font-bold uppercase mt-16 text-sm">
-            END OF FORM OF PROPOSAL
-        </div>
     </div>
 
 </body>
@@ -868,49 +864,175 @@ def get_private_prompt_template():
 
 def get_government_prompt_template():
     government_prompt_template = f"""
-You are a proposal generator.
-WHAT YOU WILL RECEIVE (as separate parts in the same request)
+    
 
-1. CONTEXT_DATA: {transcript_summary}
-2. HTML_TEMPLATE: {government_html_template}
+You are a **Proposal Generator**.
 
-GOAL
-Produce a single, fully filled proposal_document.html based on the context from CONTEXT_DATA and infer any values that needs to be added. Do NOT Hallucinate. Use only the context here. ACCO mentioned in the context is the bidder and LSHS is the project owner.
+INPUTS (you will receive in the same request):
 
-TEMPLATE HANDLING RULES
-* Replace all the blanks "custom-fill-in" with the data for the project based on the context from CONTEXT_DATA. "Calculate any data needed based on project materials and equipment costs, labour charges, contractor fees, etc specified in the context".
-* Append the following sections to the template:
-* Pricing: Create a cost Breakdown section; ensure a clearly emphasized “Total Project Cost” row.
-* Bid Bond, Liquidated Damages, Substantial/Final Completion, Audit Allowance for Change Orders only, Lump Sum/Tax handling, Change Order Markup schedule, Retainage, Cost Definition, Warranty.    
+1. CONTEXT_DATA → {transcript_summary}
+2. HTML_TEMPLATE → {government_html_template}
 
-INTEGRATED CONTRACT INSERTS (ADD THESE WHEN APPLICABLE)
+OBJECTIVE:
+Generate a single, fully filled `proposal_document.html` by:
 
-1. Bid Bond Requirement (verbatim):
-   Project Documents: Bidders may obtain drawings and specification sets from Billís Blueprints in Everett (425-259-0859, [www.billsblue.com](http://www.billsblue.com)).
-   Bid Guarantee or Bond: Certified check, bank cashiers check or bid bond is required with each Bid, equal to 5% of the total Base Bid only. Make checks payable to the Lake Stevens School District and State of Washington; furnish bond executed by a licensed bonding agency authorized to do business in the locality of the project.
-   Right to Reject: The Owner reserves the right to accept the lowest or any other Bid, the right to reject any or all Bids, and the right to waive any irregularities in any Bid.
-   Withdrawal of Bids: No Bid may be withdrawn, except with the express permission of the Owner, after the hour set for the opening thereof, unless the award of Contract is delayed for a period exceeding 45 days.
-   Bidders’ attention is directed to State and Federal laws concerning wages, working hours and other conditions of employment and all requirements for public works construction. The contract is subject to Washington State L&I Prevailing Wage Rates effective on the Proposal date.
-   Pre-bid Meeting: One pre-bid meeting will be conducted in person at 2:00 pm, Tuesday, March 4, 2025, at Lake Stevens High School. It is RECOMMENDED that interested Bidders attend this pre-bid meeting.
+* Populating all placeholders in the HTML template with **actual values from CONTEXT_DATA**.
+* Do not output placeholder-style tokens (e.g., `$[COST]`, `[VALUE]`, `[DATE]`). Always use the real values provided in CONTEXT_DATA.
+* If a numeric or financial field exists, substitute it with the **exact number from CONTEXT_DATA**. If a total is required, calculate it from the itemized values.
+* Ensure no hallucinated information — strictly use context data provided.
+* Recognize that ACCO is the bidder and LSHS is the project owner.
+* Do not hallucinate any information.
 
-Placement: Insert into the template’s existing Bid/Notice/Instructions to Bidders section. If multiple candidate areas exist, use the most relevant “Bid Requirements,” “Instructions,” or “General Conditions” block without changing structure.
+TEMPLATE HANDLING RULES:
 
-2. Liquidated Damages / Notice to Proceed line:
-   Contract award and notice to proceed are expected to be provided by <DATE_OR_EVENT_FROM_CONTEXT_DATA>, with on-site work to begin immediately thereafter.
+1. Replace all placeholders `"custom-fill-in"` with actual values from CONTEXT_DATA.
 
-Placement: In the template’s schedule / substantial completion / contract terms descriptive area. Do not create a new section; fit within existing copy.
+   * Never leave unresolved tokens.
+   * If numeric or financial calculations are required, compute them from the provided data (equipment, labor, contractor fees).
+2. Append the following mandatory sections to the HTML template:
 
-FIELD MAPPING GUIDANCE (non-exhaustive)
+**Pricing**
 
-* Cover/Title/Owner/Addresses/Dates/IDs → from clientInfo, projectSummary, executiveSummary, siteAddress, contacts, proposalNumber, dates.
-* Scope → scopeOfWork (lists/bullets supported).
+* Provide a detailed Cost Breakdown Table.
+* Show real costs from CONTEXT_DATA, and compute the **Total Project Cost**.
+* Never use placeholder text like `$[VALUE]`.
+
+**Section: Bid Bond**
+Certified check, bank cashier’s check, or bid bond is required with each Bid, equal to [bid bond percentage from context] of the total Base Bid only.
+Make checks payable to [Owner Name from context] and State of [State Name from context]; furnish bond executed by a licensed bonding agency authorized to do business in the locality of the project.
+
+Right to Reject: The Owner reserves the right to accept the lowest or any other Bid, the right to reject any or all Bids, and the right to waive any irregularities in any Bid.
+
+Withdrawal of Bids: No Bid may be withdrawn, except with the express permission of the Owner, after the hour set for the opening thereof, unless the award of Contract is delayed for a period exceeding [days from context data].
+
+Bidders’ attention is directed to State and Federal laws concerning wages, working hours, and other conditions of employment and all requirements for public works construction. The contract is subject to Washington State L&I Prevailing Wage Rates effective on the Proposal date.
+
+Pre-bid Meeting: One pre-bid meeting will be conducted in person at [date and time from context data].
+
+**Section: Liquidated damages**
+Liquidated damages shall be $[liquidated damages from context] per day for each calendar day after the Contract Time that Substantial Completion is not attained.
+
+**Section: Substantial completion date **
+The Contractor shall achieve Substantial Completion of the entire Work no later than [date from context data] and
+shall achieve Final Completion no later than thirty days thereafter, subject to adjustments of the Contract Time as
+provided in the Contract Documents.
+
+**Section: Final completion date**
+The Contractor shall achieve Final Completion of the entire Work no later than thirty days after Substantial Completion, subject to adjustments of the Contract Time as [date from context data]
+
+**Section: Lump sum or markup approach on proposal**
+1.1 The School District shall pay the Contractor for the Contractorís performance of the Contract the Contract
+Sum of [contract sum from context] Dollars ([contract sum from context]),
+subject to additions and deductions as provided in the Contract Documents. Sales tax is not included in and shall be
+added to the Contract Sum.
+1.2 The Contract Sum is based upon and includes the following alternates, if any, which are described in the
+Contract Documents and are hereby accepted by the School District: [alternates from context]
+1.3 Unit prices, if any, are as follows: [unit prices from context]
+1.4 Allowances, if any, are as follows: [allowances from context]
+1.5 This Project [project from context] is / [project from context] is not estimated to cost one million dollars or more. If ìisî is selected, then this
+Project is subject to the apprenticeship requirements of RCW 39.04.320 and Section 10.17 in the attached General
+Conditions. If ìis notî is selected, such apprenticeship requirements do not apply.
+1.6 Other important Project information, if any: [other important Project information from context]
+
+**Section: Change order markup for prime, subs, and total**
+Fee: The allowance for all combined overhead,
+profit, and other costs, including all office, home office, extended
+and site overhead (including project manager, project engineer,
+superintendent and general foreman time), and all delay and
+including impact costs of any kind, added to the total cost to the
+School District of any Change Order or any Claim for additional
+work or extra payment of any kind on this Project shall be strictly
+limited to the following schedule:
+1.1 For the Contractor, for any materials or work
+performed by the Contractorís own forces, [change order markup for prime from context]% of the
+cost.
+1.2 For the Contractor, for materials or work performed
+by its Subcontractor, [change order markup for subs from context]% of the amount due the
+Subcontractor.
+1.3 For each Subcontractor (including lower tier
+subcontractor involved), for any materials or work
+performed by its own forces, [change order markup for subs from context]% of the cost.
+1.4 For each Subcontractor, for materials or work
+performed by its subcontractors of any lower tier, [change order markup for subs from context]% of
+the amount due the sub-subcontractor.
+
+**Section: Retainage**
+Progress Payments. If progress payments are to
+be made to the Contractor:
+1.1 Pursuant to RCW 60.28, the School District will
+reserve [retainage from context]% retainage from the moneys the Contractor
+earns on estimates during the progress of the Work, to be
+retained as a trust fund for the protection and payment of
+the claims of any person arising under the Agreement
+and the state with respect to taxes imposed pursuant to
+Title 82 RCW which may be due from the Contractor.
+1.2 The moneys reserved may, at the option of the
+Contractor, be (1) retained in a fund by the School
+District until [days from context] days following Final Acceptance; or (2)
+deposited by the School District in an interest-bearing
+account in a bank, mutual savings bank, or savings and
+loan association, not subject to withdrawal until [days from context] days
+following Final Acceptance, with interest to the
+Contractor; or (3) placed in escrow with a bank or trust
+company until [days from context] days following the Final Acceptance,
+by the School Districtís joint check to the bank or trust
+company and the Contractor, to be converted into bonds
+and securities chosen by the Contractor, approved by the
+School District, and held in escrow, with interest on the   
+bonds and securities paid to the Contractor as it accrues.
+1.3 Contractor may retain payment of not more than [retainage from context]%
+from the moneys earned by any Subcontractor, provided
+that the Contractor pays interest to the Subcontractor at
+the same interest rate it receives from its reserved funds.
+
+*Section: Warranty*
+The Contractor warrants that
+materials and equipment furnished under the Agreement will be
+of good quality and new, that the Work will be performed in a
+skillful and workmanlike manner, free from defects not inherent
+in the quality required or explicitly permitted, and that the Work
+will conform to the requirements of the Contract Documents. The
+School District may conclude that Work not conforming to these
+requirements, including substitutions or deviations from the
+drawings or specifications not properly approved and authorized,
+is defective. The Contractorís warranty excludes remedy for
+damage or defect caused by abuse, modifications not executed by
+the Contractor, improper or insufficient maintenance, improper
+operation, or normal wear and tear under normal usage.
+
+
+
+
+
+
+FIELD MAPPING GUIDANCE:
+
+* Cover / Title / Owner / Addresses / Dates / IDs → clientInfo, projectSummary, executiveSummary, siteAddress, contacts, proposalNumber, dates.
+* Scope of Work → scopeOfWork (supports bullet lists).
 * Equipment & Materials → equipmentMaterials.
-* Inclusions/Clarifications/Exclusions → inclusions, clarifications, exclusions.
-* Timeline/Milestones → timeline, dates.substantialCompletion, dates.finalCompletion.
-* Pricing table → costBreakdown rows; compute/display Total Project Cost using provided total if present; otherwise sum numeric line items. Respect template currency/formatting if implied.
-* Terms & Conditions → termsConditions, plus any contract specifics listed above when present.
+* Inclusions / Clarifications / Exclusions → inclusions, clarifications, exclusions.
+* Timeline / Milestones → timeline, dates.substantialCompletion, dates.finalCompletion.
+* Pricing Table → costBreakdown rows; compute/display Total Project Cost. Respect template currency/formatting if implied. Always substitute real numeric values.
+* Terms & Conditions → termsConditions + any contract specifics from context.
 
-"""
+
+ STYLING REQUIREMENTS:
+* Complete HTML5 document with semantic markup.
+* Use Tailwind CSS framework for styling.
+* Single card/container design that wraps all content sections.
+* Do not use horizontal lines, borders, or underlines below section titles or headers.
+* Responsive design (mobile-first approach) to ensure readability on all devices.
+* Focus on clarity and professionalism over complex design elements.
+* The document should be easily printable and readable.
+
+FINAL DELIVERABLE:
+A single, context-filled HTML proposal document with:
+* No placeholder-style values.
+* All numbers and text filled directly from CONTEXT_DATA.
+* Correctly mapped and formatted sections.
+
+
+    """
 
     return government_prompt_template
     
